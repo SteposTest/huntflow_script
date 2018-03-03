@@ -38,6 +38,20 @@ def save_row(row):
         f_obj.write(str(row))
 
 
+def get_candidate_content(name, position):
+    for path, dirs, files in os.walk(os.path.join(args.base_dir, position)):
+        for i in files:
+            if _normalize_str(name) in _normalize_str(i):
+                file = open(os.path.join(path, i), 'rb')
+                result = file.read()
+                file.close()
+                return result
+
+
+def _normalize_str(bad_str):
+    return bad_str.strip().lower().replace('й', 'и').replace('̆', '')
+
+
 filename = os.path.join(args.base_dir, args.db_name)
 wb = openpyxl.load_workbook(filename)
 ws = wb.active
@@ -54,6 +68,8 @@ while True:
 
     if not candidate_info:
         break
+
+    content = get_candidate_content(candidate_info['name'], candidate_info['position'])
 
     current_row += 1
     save_row(current_row)
