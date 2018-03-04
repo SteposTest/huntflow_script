@@ -17,11 +17,12 @@ parser.add_argument("-m", "--mail", help="add your mail to user-agent")
 args = parser.parse_args()
 
 BASE_HEADERS = {
-    'User-Agent': 'test_script/1.0' + f'({args.mail})',
+    'User-Agent': f'test_script/1.0 ({args.mail})',
     'Authorization': f'Bearer {args.token}'
 }
 BASE_URL = 'https://api.huntflow.ru/'
-SCRIPT_INFO = 'script_info.txt'
+STATE = 'state.txt'
+ACCOUNT_SOURCE = 73803
 BASE_ROWS = {
     'position': 1,
     'name': 2,
@@ -33,7 +34,7 @@ BASE_ROWS = {
 
 def get_row():
     try:
-        with open(SCRIPT_INFO) as f_obj:
+        with open(STATE) as f_obj:
             row = int(f_obj.read())
     except:
         row = 2
@@ -42,7 +43,7 @@ def get_row():
 
 
 def save_row(row):
-    with open(SCRIPT_INFO, 'w') as f_obj:
+    with open(STATE, 'w') as f_obj:
         f_obj.write(str(row))
 
 
@@ -140,7 +141,7 @@ while True:
                         'id': content_info.get('id', None)
                     }
                 ],
-                'account_source': 73803
+                'account_source': ACCOUNT_SOURCE
             }
         ]
     }
